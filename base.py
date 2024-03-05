@@ -1,4 +1,5 @@
 import sqlite3
+from sqlite3 import IntegrityError
 
 connection = sqlite3.connect('database.db')
 cursor = connection.cursor()
@@ -11,6 +12,10 @@ city TEXT NOT NULL
 
 
 def add_user(id: int, city: str):
+    try:
+        cursor.execute('DELETE FROM Users WHERE id = ?', (id,))
+    except IntegrityError:
+        pass
     cursor.execute('INSERT INTO Users (id, city) VALUES (?, ?)', (id, city))
     connection.commit()
 
