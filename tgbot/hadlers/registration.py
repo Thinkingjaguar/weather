@@ -4,6 +4,7 @@ from base import add_user, delete_user
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from keyboard import get_city
+from parser import get_weather
 
 router = Router()
 
@@ -34,5 +35,5 @@ async def add_new_user(callback: types.CallbackQuery, state: FSMContext):
     await callback.message.delete()
     add_user(callback.from_user.id, callback.data[5:])
     await state.set_state(Registration.choosed_city)
-    await callback.message.answer('Вы успешно добавлены.')
+    await callback.message.answer(f'Температура сегодня{get_weather(callback.data[6:])}')
     await callback.answer()
